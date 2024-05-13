@@ -1,45 +1,38 @@
-CREATE TABLE IF NOT EXISTS cinemas
+CREATE TABLE IF NOT EXISTS student
 (
-    cinema_id   SERIAL PRIMARY KEY,
-    name        VARCHAR(255) NOT NULL,
-    location    VARCHAR(255) NOT NULL,
-    total_halls INT          NOT NULL
+    student_id SERIAL PRIMARY KEY,
+    department_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS halls
+CREATE TABLE IF NOT EXISTS department
 (
-    hall_id       SERIAL PRIMARY KEY,
-    cinema_id     INT NOT NULL,
-    hall_number   INT NOT NULL,
-    seat_capacity INT NOT NULL,
-    FOREIGN KEY (cinema_id) REFERENCES cinemas (cinema_id) ON DELETE CASCADE
+    department_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS movies
+CREATE TABLE IF NOT EXISTS class
 (
-    movie_id SERIAL PRIMARY KEY,
-    title    VARCHAR(255) NOT NULL,
-    duration INT          NOT NULL,
-    rating   VARCHAR(50),
-    genre    VARCHAR(100)
+    class_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    time TIME NOT NULL,
+    room INT NOT NULL,
+    building_id INT NOT NULL,
+    FOREIGN KEY (building_id) REFERENCES building (building_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS showtimes
+CREATE TABLE IF NOT EXISTS presence
 (
-    showtime_id SERIAL PRIMARY KEY,
-    movie_id    INT       NOT NULL,
-    hall_id     INT       NOT NULL,
-    start_time  TIMESTAMP NOT NULL,
-    end_time    TIMESTAMP NOT NULL,
-    FOREIGN KEY (movie_id) REFERENCES movies (movie_id) ON DELETE CASCADE,
-    FOREIGN KEY (hall_id) REFERENCES halls (hall_id) ON DELETE CASCADE
+    presence_id SERIAL PRIMARY KEY,
+    student_id INT NOT NULL,
+    class_id INT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES class (class_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS tickets
+CREATE TABLE IF NOT EXISTS building
 (
-    ticket_id   SERIAL PRIMARY KEY,
-    showtime_id INT NOT NULL,
-    seat_number INT NOT NULL,
-    price       INT NOT NULL,
-    FOREIGN KEY (showtime_id) REFERENCES showtimes (showtime_id) ON DELETE CASCADE
+    building_id SERIAL PRIMARY KEY,
+    number INT NOT NULL,
+    street VARCHAR(255) NOT NULL
 );
